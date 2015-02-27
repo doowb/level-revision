@@ -47,6 +47,8 @@ function LevelRevision (db, options) {
 
 LevelRevision.prototype.validateRevision = function(key, value, options, cb) {
   var self = this;
+  key = Array.isArray(key) ? key : [key];
+
   this._db.get(key, function (err, current) {
     if (err && err.notFound) {
       return cb(null, true);
@@ -84,6 +86,8 @@ LevelRevision.prototype.getLast = function(key, options, cb) {
     options = {};
   }
   options = options || {};
+  key = Array.isArray(key) ? key : [key];
+
   var results = null;
   self._revisions.createReadStream({reverse: true, limit: 1, gte: key.concat(null), lt: key.concat(undefined)})
     .on('data', function (revision) {
@@ -140,6 +144,7 @@ LevelRevision.prototype.put = function(key, value, options, cb) {
     options = {};
   }
   options = options || {};
+  key = Array.isArray(key) ? key : [key];
 
   this.validateRevision(key, value, options, function (err, valid, conflict) {
     if (err) return cb(err);
@@ -169,10 +174,12 @@ LevelRevision.prototype.put = function(key, value, options, cb) {
 };
 
 LevelRevision.prototype.get = function(key, options, cb) {
+  key = Array.isArray(key) ? key : [key];
   return this._db.get.apply(this._db, arguments);
 };
 
 LevelRevision.prototype.del = function(key, options, cb) {
+  key = Array.isArray(key) ? key : [key];
   return this._db.del.apply(this._db, arguments);
 };
 
