@@ -11,7 +11,7 @@ npm i level-revision --save
 ## Usage
 
 ```js
-var levelRevision = require('level-revision');
+var LevelRevision = require('level-revision');
 ```
 
 ## API
