@@ -27,7 +27,7 @@ module.exports = LevelRevision;
  *
  * @param {Object} `db` [LevelUp] compatable instance.
  * @param {Object} `options` Additional options
- * @public
+ * @api public
  */
 
 function LevelRevision (db, options) {
@@ -90,7 +90,7 @@ LevelRevision.prototype.validateRevision = function(key, value, options, cb) {
  * @param  {String|Array} `key` Key to search for.
  * @param  {Object} `options` Additional options
  * @param  {Function} `cb` Callback that takes `err` and `results`
- * @public
+ * @api public
  * @async
  */
 
@@ -148,7 +148,7 @@ LevelRevision.prototype.getLast = function(key, options, cb) {
  * @param  {Object} `value` JSON object to store.
  * @param  {Object} `options` Additional options
  * @param  {Function} `cb` Callback function containing an `err` and `results` property.
- * @public
+ * @api public
  * @async
  */
 
@@ -202,7 +202,7 @@ LevelRevision.prototype.put = function(key, value, options, cb) {
  * @param  {String|Array} `key` Key to look up.
  * @param  {Object} `options` Additional options.
  * @param  {Function} `cb` Callback function that takes `err` and `results`
- * @public
+ * @api public
  * @async
  */
 
@@ -223,7 +223,7 @@ LevelRevision.prototype.get = function(key, options, cb) {
  * @param  {String|Array} `key` Key to delete
  * @param  {Object} `options` Additional options
  * @param  {Function} `cb` Callback function that takes `err`
- * @public
+ * @api public
  * @async
  */
 
