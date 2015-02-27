@@ -15,6 +15,21 @@ var timestamps = require('./lib/timestamps');
 
 module.exports = LevelRevision;
 
+/**
+ * Create an instance of a leveldb with revision support.
+ *
+ * ```js
+ * var LevelRevision = require('level-revision');
+ * var level = require('level');
+ * var db = level('path/to/db');
+ * db = new LevelRevision(db);
+ * ```
+ *
+ * @param {Object} `db` [LevelUp] compatable instance.
+ * @param {Object} `options` Additional options
+ * @public
+ */
+
 function LevelRevision (db, options) {
   var self = this;
   if (!(this instanceof LevelRevision)) {
