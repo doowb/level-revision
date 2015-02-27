@@ -1,6 +1,6 @@
 {
   "name": "level-revision",
-  "description": "Keep document revisions in LevelDB.",
+  "description": "Add revision support to records in a level database.",
   "version": "0.1.0",
   "homepage": "https://github.com/doowb/level-revision",
   "author": {
