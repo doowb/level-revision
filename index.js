@@ -146,6 +146,7 @@ LevelRevision.prototype.put = function(key, value, options, cb) {
   options = options || {};
   key = Array.isArray(key) ? key : [key];
 
+  // TODO: simplify this with async to make more readable
   this.validateRevision(key, value, options, function (err, valid, conflict) {
     if (err) return cb(err);
     if (!valid) {
@@ -173,14 +174,47 @@ LevelRevision.prototype.put = function(key, value, options, cb) {
   });
 };
 
+/**
+ * Get an item by the key.
+ *
+ * ```js
+ * db.get(['item-1'], function (err, results) {
+ *   if (err) return console.log(err);
+ *   //=> results
+ * });
+ * ```
+ *
+ * @param  {String|Array} `key` Key to look up.
+ * @param  {Object} `options` Additional options.
+ * @param  {Function} `cb` Callback function that takes `err` and `results`
+ * @public
+ * @async
+ */
+
 LevelRevision.prototype.get = function(key, options, cb) {
   key = Array.isArray(key) ? key : [key];
-  return this._db.get.apply(this._db, arguments);
+  this._db.get.apply(this._db, key, options, cb);
 };
+
+/**
+ * Remove an item and all of the revisions associated with the item.
+ *
+ * ```js
+ * db.del(['item-1'], function (err) {
+ *   //=> err
+ * });
+ * ```
+ *
+ * @param  {String|Array} `key` Key to delete
+ * @param  {Object} `options` Additional options
+ * @param  {Function} `cb` Callback function that takes `err`
+ * @public
+ * @async
+ */
 
 LevelRevision.prototype.del = function(key, options, cb) {
   key = Array.isArray(key) ? key : [key];
-  return this._db.del.apply(this._db, arguments);
+  this._db.del.apply(this._db, key, options, cb);
 };
 
 LevelRevision.prototype.batch = function(rows, options, cb) {
@@ -209,8 +243,4 @@ LevelRevision.prototype.createWriteStream = function(options) {
 
 LevelRevision.prototype.close = function(cb) {
   this._db.close(cb);
-};
-
-LevelRevision.prototype.makeRevision = function(options) {
-  return 1;
 };
