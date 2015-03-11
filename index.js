@@ -11,8 +11,6 @@ var sublevel = require('level-sublevel/bytewise');
 var defaults = require('levelup-defaults');
 var bytewise = require('bytewise');
 
-var timestamps = require('./lib/timestamps');
-
 module.exports = LevelRevision;
 
 /**
@@ -39,6 +37,11 @@ function LevelRevision (db, options) {
     options = {};
   }
 
+  if (!options.strategy) {
+    throw new Error('LevelRevision expects a strategy for storing revisions.');
+  }
+
+
   db = defaults(db, {
     keyEncoding: bytewise,
     valueEncoding: options.valueEncoding || 'json'
@@ -47,42 +50,9 @@ function LevelRevision (db, options) {
   db = sublevel(db);
 
   this._db = db;
-  this._revisions = this._db.sublevel('revisions');
+  this._strategy = options.strategy(this._db, options);
 };
 
-/**
- * Validate the that given revision is one that can be updated.
- *
- * @param  {String|Array} `key` Key of the row to look for.
- * @param  {Object} `value` New value to compare with.
- * @param  {Object} `options` Additional options
- * @param  {Function} `cb` Callback function that takes `err`, `valid`, and `conflict`
- * @async
- */
-
-LevelRevision.prototype.validateRevision = function(key, value, options, cb) {
-  var self = this;
-  key = Array.isArray(key) ? key : [key];
-
-  this._db.get(key, function (err, current) {
-    if (err && err.notFound) {
-      return cb(null, true);
-    }
-    if (err) {
-      return cb(err);
-    }
-    if (current.rev === value.rev) {
-      return cb(null, true);
-    }
-
-    self.getLast(key, function (err, revision) {
-      if (err) return cb(err);
-      if (revision.rev > (value.rev || 0)) {
-        cb(null, false, revision);
-      }
-    });
-  });
-};
 
 /**
  * Get the last (most recent) revision for the given key.
@@ -95,27 +65,7 @@ LevelRevision.prototype.validateRevision = function(key, value, options, cb) {
  */
 
 LevelRevision.prototype.getLast = function(key, options, cb) {
-  var self = this;
-  if (typeof options === 'function') {
-    cb = options;
-    options = {};
-  }
-  options = options || {};
-  key = Array.isArray(key) ? key : [key];
-
-  var results = null;
-  self._revisions.createReadStream({reverse: true, limit: 1, gte: key.concat(null), lt: key.concat(undefined)})
-    .on('data', function (revision) {
-      results = revision;
-    })
-    .on('end', function () {
-      if (!results) {
-        var err = new Error('NotFoundError');
-        err.notFound = true;
-        return cb(err);
-      }
-      cb(null, results.value);
-    });
+  this._strategy.getLast.apply(this._strategy, arguments);
 };
 
 /**
@@ -162,7 +112,7 @@ LevelRevision.prototype.put = function(key, value, options, cb) {
   key = Array.isArray(key) ? key : [key];
 
   // TODO: simplify this with async to make more readable
-  this.validateRevision(key, value, options, function (err, valid, conflict) {
+  this._strategy.validate(key, value, options, function (err, valid, conflict) {
     if (err) return cb(err);
     if (!valid) {
       return cb(new Error([
@@ -173,14 +123,8 @@ LevelRevision.prototype.put = function(key, value, options, cb) {
         ].join(' ')),
       conflict);
     }
-
-    timestamps(self._db, key, value, function (err, value) {
+    self._strategy.createBatch(key, value, function (err, rows) {
       if (err) return cb(err);
-      value.rev = (value.rev || 0) + 1;
-      var rows = [
-        { type: 'put', key: key, value: value },
-        { type: 'put', key: key.concat(value.rev), value: value, prefix: self._revisions }
-      ];
       self._db.batch(rows, function (err) {
         if (err) return cb(err);
         self._db.get(key, cb);
@@ -207,8 +151,7 @@ LevelRevision.prototype.put = function(key, value, options, cb) {
  */
 
 LevelRevision.prototype.get = function(key, options, cb) {
-  key = Array.isArray(key) ? key : [key];
-  this._db.get.apply(this._db, key, options, cb);
+  this._db.get(key, options, cb);
 };
 
 /**

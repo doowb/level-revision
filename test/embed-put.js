@@ -1,6 +1,8 @@
 'use strict';
 
 var LevelRevision = require('../');
+var LevelRevisionEmbed = require('../lib/level-revision-embed');
+
 var rimraf = require('rimraf');
 var mkdirp = require('mkdirp');
 var assert = require('assert');
@@ -13,13 +15,13 @@ var dbPath = path.join(dataPath, '.test.db');
 
 var _db = null;
 var db = null;
-describe('LevelRevision', function () {
+describe('LevelRevision with LevelRevisionEmbed', function () {
   beforeEach(function (done) {
     rimraf(dataPath, function (err) {
       if (err) return done(err);
       mkdirp.sync(dataPath);
       _db = level(dbPath);
-      db = new LevelRevision(_db);
+      db = new LevelRevision(_db, { strategy: LevelRevisionEmbed });
       done();
     });
   });
@@ -35,14 +37,13 @@ describe('LevelRevision', function () {
       if (err) return done(err);
       assert(item != null, 'item should be valid');
       assert.equal(item.id, 'item-1');
-      assert.ok(item.createdAt);
-      assert.equal(item.createdAt, item.modifiedAt);
       assert.equal(item.rev, 1);
+      assert.deepEqual(item.revisions, [ { id: 'item-1', description: 'Item 1', rev: 1 }]);
 
-      db._revisions.get(['test-item-1', 1], function (err, revision) {
+      db.get(['test-item-1', 1], function (err, revision) {
         if (err) return done(err);
         assert(revision != null, 'revision should be valid');
-        assert.deepEqual(revision, item);
+        assert.deepEqual(revision, ['test-item-1']);
         done();
       });
     });
@@ -56,10 +57,22 @@ describe('LevelRevision', function () {
         if (err) return done(err);
         assert(item2 != null, 'item2 should be valid');
         assert.equal(item2.id, 'item-2');
-        assert.ok(item2.createdAt);
-        assert.notEqual(item2.createdAt, item2.modifiedAt);
         assert.equal(item2.rev, 2);
-        done();
+        assert.deepEqual(item2.revisions, [
+          { id: 'item-2', description: 'Item 2', rev: 1},
+          { id: 'item-2', description: 'Updated Item 2', rev: 2}
+        ]);
+        db.get(['test-item-2'], function (err, item3) {
+          if (err) return done(err);
+          assert(item3 != null, 'item3 should be valid');
+          assert.equal(item3.id, 'item-2');
+          assert.equal(item3.rev, 2);
+          assert.deepEqual(item3.revisions, [
+            { id: 'item-2', description: 'Item 2', rev: 1},
+            { id: 'item-2', description: 'Updated Item 2', rev: 2}
+          ]);
+          done();
+        });
       });
     });
   });

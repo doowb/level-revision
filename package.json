@@ -27,13 +27,14 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "dev": "watch -p \"**/*.js\" -c \"npm test\""
   },
   "dependencies": {
     "bytewise": "^0.7.1",
     "level-sublevel": "^6.4.6",
-    "level-timestamps": "git://github.com/doowb/level-timestamps",
-    "levelup-defaults": "^1.0.2"
+    "levelup-defaults": "^1.0.2",
+    "object-omit": "^1.0.0"
   },
   "devDependencies": {
     "async": "^0.9.0",
