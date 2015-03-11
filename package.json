@@ -45,5 +45,10 @@
     "rimraf": "^2.2.8",
     "should": "*"
   },
-  "keywords": []
+  "keywords": [
+    "leveldb",
+    "level",
+    "levelup",
+    "level revisions"
+  ]
 }
