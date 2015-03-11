@@ -43,8 +43,7 @@
     "mkdirp": "^0.5.0",
     "mocha": "*",
     "multilevel": "^6.1.0",
-    "rimraf": "^2.2.8",
-    "should": "*"
+    "rimraf": "^2.2.8"
   },
   "keywords": [
     "leveldb",

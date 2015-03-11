@@ -15,7 +15,7 @@ var LevelRevision = require('level-revision');
 ```
 
 ## API
-### [LevelRevision](./index.js#L33)
+### [LevelRevision](./index.js#L31)
 
 Create an instance of a leveldb with revision support.
 
@@ -29,7 +29,7 @@ var db = level('path/to/db');
 db = new LevelRevision(db);
 ```
 
-### [.getLast](./index.js#L97)
+### [.getLast](./index.js#L67)
 
 * `key` **{String|Array}**: Key to search for.    
 * `options` **{Object}**: Additional options    
@@ -37,7 +37,7 @@ db = new LevelRevision(db);
 
 Get the last (most recent) revision for the given key.
 
-### [.put](./index.js#L155)
+### [.put](./index.js#L105)
 
 Add a value to the database. Timestamp values will automatically be applied. When updating a value, the current `rev` property is required. If a `rev` property is supplied and it's not the latest, a `RevisionConflict` error will be returned along with the latest version. This allows handling the conflict.
 
@@ -66,7 +66,7 @@ db.put(['item', '1'], { id: '1', description: 'Description of item 1.', rev: 1 }
 });
 ```
 
-### [.get](./index.js#L209)
+### [.get](./index.js#L153)
 
 Get an item by the key.
 
@@ -81,7 +81,7 @@ db.get(['item-1'], function (err, results) {
 });
 ```
 
-### [.del](./index.js#L230)
+### [.del](./index.js#L173)
 
 Remove an item and all of the revisions associated with the item.
 
