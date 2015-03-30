@@ -2,6 +2,11 @@
 
 > Add revision support to records in a level database.
 
+## Goal
+
+The goal of this library is to enable keeping revisions of documents stored in a `[LevelUp]` and easily querying and reading revisions.
+This library allows you to choose the strategy for storing the revisions by passing in a library that [meets the strategy interface](/#strategy-interface).
+
 ## Install with [npm](npmjs.org)
 
 ```bash
@@ -96,6 +101,12 @@ db.del(['item-1'], function (err) {
 ```
 
 
+## Strategy interface
+
+## Strategies
+
+- [Sublevel](https://github.com/doowb/level-revision-sublevel)
+- [Embedded](https://github.com/doowb/level-revision-embed)
 
 ## Run tests
 
