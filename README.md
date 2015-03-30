@@ -137,7 +137,7 @@ Get the last (most recent) revision for the given key.
 
 ## Strategies
 
-If you make a strategy, please submit a PR to add it to [this list](./.verb.md#L57)
+If you make a strategy, please submit a PR to add it to [this list](./.verb.md#strategies)
 
 - [Sublevel](https://github.com/doowb/level-revision-sublevel)
 - [Embedded](https://github.com/doowb/level-revision-embed)
