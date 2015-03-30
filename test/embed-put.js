@@ -1,7 +1,7 @@
 'use strict';
 
 var LevelRevision = require('../');
-var LevelRevisionEmbed = require('../lib/level-revision-embed');
+var LevelRevisionEmbed = require('level-revision-embed');
 
 var rimraf = require('rimraf');
 var mkdirp = require('mkdirp');

@@ -33,13 +33,14 @@
   "dependencies": {
     "bytewise": "^0.7.1",
     "level-sublevel": "^6.4.6",
-    "levelup-defaults": "^1.0.2",
-    "object-omit": "^1.0.0"
+    "levelup-defaults": "^1.0.2"
   },
   "devDependencies": {
     "async": "^0.9.0",
     "level": "^0.18.0",
     "level-party": "^1.0.1",
+    "level-revision-embed": "git://github.com/doowb/level-revision-embed",
+    "level-revision-sublevel": "git://github.com/doowb/level-revision-sublevel",
     "mkdirp": "^0.5.0",
     "mocha": "*",
     "multilevel": "^6.1.0",

@@ -1,7 +1,7 @@
 'use strict';
 
 var LevelRevision = require('../');
-var LevelRevisionSublevel = require('../lib/level-revision-sublevel');
+var LevelRevisionSublevel = require('level-revision-sublevel');
 
 var rimraf = require('rimraf');
 var mkdirp = require('mkdirp');
