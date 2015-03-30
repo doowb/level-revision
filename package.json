@@ -19,8 +19,7 @@
     "url": "https://github.com/doowb/level-revision/blob/master/LICENSE"
   },
   "files": [
-    "index.js",
-    "lib/"
+    "index.js"
   ],
   "main": "index.js",
   "engines": {
