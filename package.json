@@ -50,5 +50,12 @@
     "level",
     "levelup",
     "level revisions"
+  ],
+  "contributors": [
+    {
+      "name": "Brian Woodward",
+      "email": "brian.woodward@gmail.com",
+      "url": "https://github.com/doowb"
+    }
   ]
 }
